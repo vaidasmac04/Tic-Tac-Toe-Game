@@ -2,7 +2,7 @@
 
 This is my first React project and it is based on the react tutorial at https://reactjs.org/tutorial/tutorial.html.
 
-Features to be added:
+Features to be added (suggested in the tutorial):
 - Display the location for each move in the format (col, row) in the move history list.
 - Bold the currently selected item in the move list.
 - Rewrite Board to use two loops to make the squares instead of hardcoding them.
