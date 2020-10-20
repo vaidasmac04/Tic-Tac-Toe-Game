@@ -52,3 +52,16 @@ ol, ul {
 .selected-item, .selected-item > button {
   font-weight: bold;
 }
+
+.margin-top{
+  margin-top: 20px;
+}
+
+.margin-bottom{
+  margin-top: 20px;
+}
+
+
+.margin-left{
+  margin-left: 15px;
+}

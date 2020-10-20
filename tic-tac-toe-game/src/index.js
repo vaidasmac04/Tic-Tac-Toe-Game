@@ -50,7 +50,8 @@ class Game extends React.Component {
         location: [null, null],
 		  }],
 		  xIsNext: true,
-		  stepNumber: 0,
+      stepNumber: 0,
+      isAscending: false,
 	  };
   }
 	
@@ -71,9 +72,15 @@ class Game extends React.Component {
       location: [Math.floor(i/3)+1, i%3+1]
 		}]),
 		stepNumber: history.length,
-		xIsNext: !this.state.xIsNext,
+    xIsNext: !this.state.xIsNext,
 	});
-  }	  
+  }	 
+  
+  handleSortingButtonClick(){
+    this.setState({
+        isAscending: !this.state.isAscending,
+    });
+  }
   
   jumpTo(step) {
     this.setState({
@@ -85,9 +92,9 @@ class Game extends React.Component {
   render() {
 	const history = this.state.history;
 	const current = history[this.state.stepNumber];
-	const winner = calculateWinner(current.squares);
+  const winner = calculateWinner(current.squares);
 	
-	const moves = history.map((step, move) => {
+	let moves = history.map((step, move) => {
 		const desc = move ? 'Go to move #' + move:
                         'Go to game start';           
 		return (
@@ -102,7 +109,11 @@ class Game extends React.Component {
 			</li>
 		  );
     });
-	
+  
+  if(!this.state.isAscending){
+    moves.reverse()
+  }
+
 	let status;
 	
 	if(winner){
@@ -122,7 +133,11 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <div class="margin-top margin-bottom margin-left">
+            Showing in {this.state.isAscending ? "ascending" : "descending"} order &rarr; <button onClick={() => this.handleSortingButtonClick()}> Change </button>
+          </div>
+          
+          <ol reversed={!this.state.isAscending}>{moves}</ol>
         </div>
       </div>
     );
