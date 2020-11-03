@@ -62,7 +62,7 @@ class Game extends React.Component {
 	const current = history[history.length - 1];	
 	const squares = current.squares.slice();
 	
-	if(calculateWinner(squares) || squares[i]){
+	if(calculateWinner(squares).symbol || squares[i]){
 		return;
 	}
 	
@@ -116,10 +116,13 @@ class Game extends React.Component {
   }
 
 	let status;
-	
-	if(winner){
+
+	if(winner.symbol){
 		status = 'Winner: ' + winner.symbol;
-	}
+  }
+  else if(winner.isDraw){
+    status = 'Draw';
+  }
 	else{
 		status = 'Next player: ' + 
 		  (this.state.xIsNext ? 'X' : 'O');
@@ -134,7 +137,7 @@ class Game extends React.Component {
         winnerCoordinates={winner ? winner.coordinates : null}/>
         </div>
         <div className="game-info">
-          <div>{status}</div>
+          <div class="status">{status}</div>
           <div class="margin-top margin-bottom margin-left">
             Showing in {this.state.isAscending ? "ascending" : "descending"} order &rarr; <button onClick={() => this.handleSortingButtonClick()}> Change </button>
           </div>
@@ -173,10 +176,23 @@ function calculateWinner(squares){
 	           squares[a] === squares[c]) {
         return {
           symbol: squares[a],
-          coordinates: lines[i]
+          coordinates: lines[i],
+          isDraw: false
         };
       }
   }
+
+  let isDraw = true;
+  for(let i = 0; i < squares.length; i++){
+    if(squares[i] === null){
+      isDraw = false;
+      break;
+    }
+  }
   
-  return null;
+  return  {
+    symbol: null,
+    coordinates: null,
+    isDraw: isDraw
+  };
 }
