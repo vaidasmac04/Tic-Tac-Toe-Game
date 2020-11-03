@@ -5,9 +5,9 @@ import './index.css';
 function Square(props) {
 	
     return (
-      <button 
-	    className="square" 
-	    onClick = {props.onClick}
+      <button
+	    className= {props.winnerCoordinate ? "square highlighted" : "square"}
+      onClick = {props.onClick}
 	  >
         {props.value}
       </button>
@@ -20,7 +20,8 @@ class Board extends React.Component {
     return (
 	  <Square 
 	    value={this.props.squares[i]} 
-		onClick={() => this.props.onClick(i)}
+    onClick={() => this.props.onClick(i)}
+    winnerCoordinate={this.props.winnerCoordinates && this.props.winnerCoordinates.includes(i)}
 		/>
 	);
   }
@@ -117,7 +118,7 @@ class Game extends React.Component {
 	let status;
 	
 	if(winner){
-		status = 'Winner: ' + winner;
+		status = 'Winner: ' + winner.symbol;
 	}
 	else{
 		status = 'Next player: ' + 
@@ -129,7 +130,8 @@ class Game extends React.Component {
         <div className="game-board">
           <Board 
 		    squares={current.squares}
-			  onClick={(i) => this.handleClick(i)}/>
+			  onClick={(i) => this.handleClick(i)}
+        winnerCoordinates={winner ? winner.coordinates : null}/>
         </div>
         <div className="game-info">
           <div>{status}</div>
@@ -162,13 +164,17 @@ function calculateWinner(squares){
 	  [0, 4, 8],
 	  [2, 4, 6],
     ];
-	
+  
+
 	for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
 	
       if (squares[a] && squares[a] === squares[b] && 
 	           squares[a] === squares[c]) {
-        return squares[a];
+        return {
+          symbol: squares[a],
+          coordinates: lines[i]
+        };
       }
   }
   
